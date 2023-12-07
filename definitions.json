@@ -1,0 +1,237 @@
+{
+    "rabbit_version": "3.12.8",
+    "parameters": [],
+    "policies": [],
+    "queues": [
+        {
+            "name": "tbdconn-requests",
+            "durable": true,
+            "auto_delete": false,
+            "arguments": {
+                "x-queue-type": "classic",
+                "x-queue-version": 2
+            }
+        },
+        {
+            "name": "oteconn-requests",
+            "durable": true,
+            "auto_delete": false,
+            "arguments": {
+                "x-queue-type": "classic",
+                "x-queue-version": 2
+            }
+        },
+        {
+            "name": "enerspot-measurements",
+            "durable": true,
+            "auto_delete": false,
+            "arguments": {
+                "x-queue-type": "classic",
+                "x-queue-version": 2
+            }
+        },
+        {
+            "name": "tbdconn-ote_in",
+            "durable": true,
+            "auto_delete": false,
+            "arguments": {
+                "x-queue-type": "classic",
+                "x-queue-version": 2
+            }
+        },
+        {
+            "name": "enerspot-ote_in",
+            "durable": true,
+            "auto_delete": false,
+            "arguments": {
+                "x-queue-type": "classic",
+                "x-queue-version": 2
+            }
+        },
+        {
+            "name": "tbdconn-measurements",
+            "durable": true,
+            "auto_delete": false,
+            "arguments": {
+                "x-queue-type": "classic",
+                "x-queue-version": 2
+            }
+        },
+        {
+            "name": "ote_messages-DLQ",
+            "durable": true,
+            "auto_delete": false,
+            "arguments": {
+                "x-queue-type": "classic",
+                "x-queue-version": 2
+            }
+        }
+    ],
+    "exchanges": [
+        {
+            "name": "ote_requests",
+            "type": "fanout",
+            "durable": true,
+            "auto_delete": false,
+            "internal": false,
+            "arguments": {}
+        },
+        {
+            "name": "ote_messages-enerspot",
+            "type": "fanout",
+            "durable": true,
+            "auto_delete": false,
+            "internal": false,
+            "arguments": {}
+        },
+        {
+            "name": "ote_messages-DLX",
+            "type": "fanout",
+            "durable": true,
+            "auto_delete": false,
+            "internal": false,
+            "arguments": {}
+        },
+        {
+            "name": "ote_messages",
+            "type": "topic",
+            "durable": true,
+            "auto_delete": false,
+            "internal": false,
+            "arguments": {
+                "alternate-exchange": "ote_messages-DLX"
+            }
+        },
+        {
+            "name": "ote_measurements",
+            "type": "fanout",
+            "durable": true,
+            "auto_delete": false,
+            "internal": false,
+            "arguments": {}
+        },
+        {
+            "name": "ote_messages-tabidoo",
+            "type": "fanout",
+            "durable": true,
+            "auto_delete": false,
+            "internal": false,
+            "arguments": {}
+        },
+        {
+            "name": "tabidoo_requests",
+            "type": "fanout",
+            "durable": true,
+            "auto_delete": false,
+            "internal": false,
+            "arguments": {}
+        }
+    ],
+    "bindings": [
+        {
+            "source": "ote_measurements",
+            "destination": "enerspot-measurements",
+            "destination_type": "queue",
+            "routing_key": "#",
+            "arguments": {}
+        },
+        {
+            "source": "ote_measurements",
+            "destination": "tbdconn-measurements",
+            "destination_type": "queue",
+            "routing_key": "#",
+            "arguments": {}
+        },
+        {
+            "source": "ote_messages",
+            "destination": "ote_measurements",
+            "destination_type": "exchange",
+            "routing_key": "otemsg.121",
+            "arguments": {}
+        },
+        {
+            "source": "ote_messages",
+            "destination": "ote_messages-enerspot",
+            "destination_type": "exchange",
+            "routing_key": "otemsg.178",
+            "arguments": {}
+        },
+        {
+            "source": "ote_messages",
+            "destination": "ote_messages-tabidoo",
+            "destination_type": "exchange",
+            "routing_key": "otemsg.178",
+            "arguments": {}
+        },
+        {
+            "source": "ote_messages",
+            "destination": "ote_messages-enerspot",
+            "destination_type": "exchange",
+            "routing_key": "otemsg.182",
+            "arguments": {}
+        },
+        {
+            "source": "ote_messages",
+            "destination": "ote_messages-tabidoo",
+            "destination_type": "exchange",
+            "routing_key": "otemsg.182",
+            "arguments": {}
+        },
+        {
+            "source": "ote_messages",
+            "destination": "ote_measurements",
+            "destination_type": "exchange",
+            "routing_key": "otemsg.232",
+            "arguments": {}
+        },
+        {
+            "source": "ote_messages",
+            "destination": "ote_messages-enerspot",
+            "destination_type": "exchange",
+            "routing_key": "otemsg.248",
+            "arguments": {}
+        },
+        {
+            "source": "ote_messages",
+            "destination": "ote_messages-tabidoo",
+            "destination_type": "exchange",
+            "routing_key": "otemsg.248",
+            "arguments": {}
+        },
+        {
+            "source": "ote_messages-DLX",
+            "destination": "ote_messages-DLQ",
+            "destination_type": "queue",
+            "routing_key": "#",
+            "arguments": {}
+        },
+        {
+            "source": "ote_messages-enerspot",
+            "destination": "enerspot-ote_in",
+            "destination_type": "queue",
+            "routing_key": "#",
+            "arguments": {}
+        },
+        {
+            "source": "ote_messages-tabidoo",
+            "destination": "tbdconn-ote_in",
+            "destination_type": "queue",
+            "routing_key": "#",
+            "arguments": {}
+        },
+        {
+            "source": "ote_requests",
+            "destination": "oteconn-requests",
+            "destination_type": "queue",
+            "routing_key": "#",
+            "arguments": {}
+        },
+        {
+            "source": "tabidoo_requests",
+            "destination": "tbdconn-requests",
+            "destination_type": "queue",
+            "routing_key": "#",
+            "arguments": {}
+        }
+    ]
+}
